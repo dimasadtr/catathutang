@@ -7,6 +7,10 @@ $response = file_get_contents($url);
 $data = json_decode($response, true);
 
 $pelanggan = $data["data"] ?? [];
+
+//cek role user
+$nama_user = $_SESSION['user']['username'] ?? 'Guest';
+$role = $_SESSION['user']['role'] ?? 'guest';
 ?>
 
 <!DOCTYPE html>
@@ -22,12 +26,16 @@ $pelanggan = $data["data"] ?? [];
 <body>
 
     <div class="sidebar">
-        <div class="brand"><i class="fas fa-layer-group"></i> CatatHutang</div>
+        <div class="brand"><i class="fa-solid fa-hand-holding-dollar"></i> CatatHutang</div>
         <a href="../index.php" class="active"><i class="fas fa-home"></i> Dashboard</a>
         <a href="../pelanggan/pelanggan.php"><i class="fas fa-users"></i> Pelanggan</a>
         <a href="../hutang/hutang.php"><i class="fas fa-file-invoice-dollar"></i> Hutang</a>
         <a href="../pembayaran/pembayaran.php"><i class="fas fa-wallet"></i> Pembayaran</a>
-        <a href="../user/user.php"><i class="fas fa-user"></i> User</a>
+        <?php if ($role === "admin"): ?>
+            <a href="../user/user.php"><i class="fas fa-user"></i> User</a>
+        <?php endif; ?>
+
+        <a href="user/login/userlogout.php" class="text-danger"><i class="fa-solid fa-right-from-bracket"></i> Logout</a>
     </div>
 
      <div class="main-content">
@@ -36,7 +44,8 @@ $pelanggan = $data["data"] ?? [];
                 Selamat Datang
             </div>
             <div class="user-profile">
-                <i class="fas fa-user-circle fa-lg"></i> Admin
+                <i class="fas fa-user-circle fa-lg"></i> 
+                <?php echo ucfirst($nama_user) . " (" . $role . ")"; ?>
             </div>
         </div>
 

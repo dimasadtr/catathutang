@@ -1,120 +1,39 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data Pelanggan</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="../style.css">
-</head>
-<body>
+<?php
+include '../config.php';
+$url = $base_url . "/user.php";
 
-    <div class="sidebar">
-        <div class="brand"><i class="fas fa-layer-group"></i> CatatHutang</div>
-        <a href="../index.php" class="active"><i class="fas fa-home"></i> Dashboard</a>
-        <a href="../pelanggan/pelanggan.php"><i class="fas fa-users"></i> Pelanggan</a>
-        <a href="../hutang.php"><i class="fas fa-file-invoice-dollar"></i> Hutang</a>
-        <a href="../pembayaran/pembayaran.php"><i class="fas fa-wallet"></i> Pembayaran</a>
-        <a href="user.php"><i class="fas fa-user"></i> User</a>
-    </div>
+// data form
+$id       = $_POST['id_user'];
+$nama     = $_POST['nama'];
+$username = $_POST['username'];
+$password = $_POST['password'] ?? '';
+$email    = $_POST['email'];
+$role     = $_POST['role'];
 
-     <div class="main-content">
-        <div class="top-header">
-            <div class="user-text" style="font-size: 30px; font-weight: bolder;">
-                Selamat Datang
-            </div>
-            <div class="user-profile">
-                <i class="fas fa-user-circle fa-lg"></i> Admin
-            </div>
-        </div>
+// Data ke API
+$data = [
+    "id_user" => $id,
+    "nama" => $nama,
+    "username" => $username,
+    "password" => $password,
+    "email" => $email,
+    "role" => $role
+];
 
-        <div class="page-content">
-            <div class="card p-4">
-                <div class="d-flex justify-content-between align-items-center mb-4">
-                    <h5>Daftar Transaksi Hutang</h5>
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
-                        <i class="fas fa-plus"></i> Tambah Transaksi
-                    </button>
-                </div>
+// request PUT
+$options = [
+    "http" => [
+        "header"  => "Content-Type: application/json",
+        "method"  => "PUT",
+        "content" => json_encode($data)
+    ]
+];
 
-                <div class="mb-3">
-                    <input type="text" class="form-control w-25" placeholder="Cari nama...">
-                </div>
+// Kirim ke API
+$response = file_get_contents($url, false, stream_context_create($options));
 
-                <div class="table-responsive">
-                    <table class="table table-hover align-middle">
-                        <thead class="table-light">
-                            <tr>
-                                <th>Id User</th>
-                                <th>Nama</th>
-                                <th>Username</th>
-                                <th>Password</th>
-                                <th>Email</th>
-                                <th>Role</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>admin</td>
-                                <td>admin1</td>
-                                <td>123</td>
-                                <td>admin@.com</td>
-                                <td>admin</td>
-                                <td>
-                                    <button class="btn btn-sm btn-warning text-white"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                
-                <!-- <nav>
-                    <ul class="pagination justify-content-end">
-                        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
-                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                    </ul>
-                </nav> -->
-            </div>
-        </div>
-    </div>
+// //debugging:
+//  var_dump($response);
 
-    <div class="modal fade" id="addModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Tambah Pelanggan Baru</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label class="form-label">Nama Lengkap</label>
-                            <input type="text" class="form-control" placeholder="Masukkan nama">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Alamat</label>
-                            <textarea class="form-control" rows="2"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Nomor HP</label>
-                            <input type="number" class="form-control">
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-primary">Simpan</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+echo "<script>alert('Data user berhasil diperbarui!');window.location='user.php';</script>";
+?>

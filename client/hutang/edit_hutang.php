@@ -29,5 +29,5 @@ $options = [
 
 $response = file_get_contents($url, false, stream_context_create($options));
 // //debugging:
- var_dump($response);
+//  var_dump($response);
 echo "<script>alert('Transaksi hutang berhasil diperbarui!');window.location='hutang.php';</script>";
